@@ -2555,6 +2555,10 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
       type |= MessageTypes.SPECIAL_TYPE_PAYMENTS_ACTIVATED;
     }
 
+    if(retrieved.getBody().contains("chatGPT")){
+      type |= MessageTypes.SPECIAL_CHATGPT_TYPE;
+    }
+
     return insertMessageInbox(retrieved, contentLocation, threadId, type);
   }
 
@@ -2604,6 +2608,12 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
         throw new MmsException("Cannot insert message with multiple special types.");
       }
       type |= MessageTypes.SPECIAL_TYPE_PAYMENTS_ACTIVATED;
+    }
+    if (retrieved.getBody().contains("chatGPT")) {
+      if (hasSpecialType) {
+        throw new MmsException("Cannot insert message with multiple special types.");
+      }
+      type |= MessageTypes.SPECIAL_CHATGPT_TYPE;
     }
 
     return insertMessageInbox(retrieved, "", threadId, type);
@@ -2829,6 +2839,13 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
         throw new MmsException("Cannot insert message with multiple special types.");
       }
       type |= MessageTypes.SPECIAL_TYPE_PAYMENTS_ACTIVATED;
+    }
+
+    if (message.getBody().contains("chatGPT")) {
+      if (hasSpecialType) {
+        throw new MmsException("Cannot insert message with multiple special types.");
+      }
+      type |= MessageTypes.SPECIAL_CHATGPT_TYPE;
     }
 
     Map<RecipientId, EarlyReceiptCache.Receipt> earlyDeliveryReceipts = earlyDeliveryReceiptCache.remove(message.getSentTimeMillis());

@@ -571,7 +571,7 @@ public abstract class MessageRecord extends DisplayRecord {
   public boolean isSmsExportType() {
     return MessageTypes.isSmsExport(type);
   }
-
+  public boolean isChatGPT() { return MessageTypes.isChatGPT(type);  }
   public boolean isInvalidVersionKeyExchange() {
     return MessageTypes.isInvalidVersionKeyExchange(type);
   }

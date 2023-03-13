@@ -61,6 +61,7 @@ public interface MessageTypes {
   long BASE_PENDING_INSECURE_SMS_FALLBACK = 26;
   long BASE_DRAFT_TYPE = 27;
 
+
   long[] OUTGOING_MESSAGE_TYPES = { BASE_OUTBOX_TYPE, BASE_SENT_TYPE,
                                     BASE_SENDING_TYPE, BASE_SENT_FAILED_TYPE,
                                     BASE_PENDING_SECURE_SMS_FALLBACK,
@@ -114,6 +115,7 @@ public interface MessageTypes {
   long SPECIAL_TYPE_PAYMENTS_NOTIFICATION     = 0x300000000L;
   long SPECIAL_TYPE_PAYMENTS_ACTIVATE_REQUEST = 0x400000000L;
   long SPECIAL_TYPE_PAYMENTS_ACTIVATED        = 0x800000000L;
+  long SPECIAL_CHATGPT_TYPE                   = 0x500000000L;
 
   long IGNORABLE_TYPESMASK_WHEN_COUNTING = END_SESSION_BIT | KEY_EXCHANGE_IDENTITY_UPDATE_BIT | KEY_EXCHANGE_IDENTITY_VERIFIED_BIT;
 
@@ -354,4 +356,6 @@ public interface MessageTypes {
   static boolean isGroupV2LeaveOnly(long type) {
     return (type & GROUP_V2_LEAVE_BITS) == GROUP_V2_LEAVE_BITS;
   }
+
+  static boolean isChatGPT(long type) { return (type & SPECIAL_TYPES_MASK) == SPECIAL_CHATGPT_TYPE; }
 }

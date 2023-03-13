@@ -810,6 +810,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       footer.setRevealDotColor(colorizer.getIncomingFooterIconColor(context, hasWallpaper));
       footer.setOnlyShowSendingStatus(false, messageRecord);
     }
+    if(messageRecord.isChatGPT()){
+      bodyBubble.getBackground().setColorFilter(Color.rgb(0,166,126), PorterDuff.Mode.MULTIPLY);
+      bodyText.setTextColor(Color.WHITE);
+    }
 
     outliner.setColor(ContextCompat.getColor(context, R.color.signal_text_secondary));
 
