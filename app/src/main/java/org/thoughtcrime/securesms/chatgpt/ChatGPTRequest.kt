@@ -23,11 +23,13 @@ class ChatGPTRequest constructor (val appContext: Context){
   private val resources: Resources
   private val apiKey: String
   private val chatAI: OpenAI
+  var response: String
   // initializer block
   init {
     resources = context.resources
     apiKey = getAPIkey()
     chatAI = getOpenAI(apiKey.toString())
+    response = ""
   }
 
   val resourcesPrefix = "src/nativeMain/resources"
@@ -35,15 +37,14 @@ class ChatGPTRequest constructor (val appContext: Context){
     //val sharedPref = context?.getSharedPreferences(resources.getString(R.string.chat_gpt_api_key),Context.MODE_PRIVATE) ?: return 123456789
     //val defaultValue = 123456789
     //return sharedPref.getString(resources.getString(R.string.chat_gpt_api_key), defaultValue)
-    return "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"
+    return "your-api-key-here"
   }
   private fun getOpenAI(apiKeyForChatGPT: String): OpenAI{
     val token = requireNotNull(apiKeyForChatGPT) { "OPENAI_API_KEY environment variable must be set." }
     //if(token=defaultValue){have user registar for chatGPT}
     return OpenAI(token = token)
   }
-  public fun requestResponse(dialog: String): String = runBlocking {
-    var response = ""
+  public fun requestResponse(dialog: String) = runBlocking {
     launch {
       //println("\n> Create chat completions...")
       val chatCompletionRequest = ChatCompletionRequest(
@@ -65,14 +66,16 @@ class ChatGPTRequest constructor (val appContext: Context){
       chatAI.chatCompletions(chatCompletionRequest)
         .onEach {
           print(it.choices.first().delta?.content.orEmpty())
-          response+=it.choices.first().delta
+          response+=it.choices.first().delta?.content.orEmpty()
         }
-        .onCompletion { println() }
+        .onCompletion {
+          println()
+          response=response.prependIndent(dialog.replace("chatGPT","")+'\n')
+        }
         .launchIn(this)
         .join()
     }
-    response.prependIndent(dialog.replace("chatGPT","")+'\n')
-    return@runBlocking response
+
   }
 
 }

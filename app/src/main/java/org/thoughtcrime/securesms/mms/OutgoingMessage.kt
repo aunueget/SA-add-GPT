@@ -21,7 +21,7 @@ import org.thoughtcrime.securesms.sms.GroupV2UpdateMessageUtil
 data class OutgoingMessage(
   val recipient: Recipient,
   val sentTimeMillis: Long,
-  val body: String = "",
+  var body: String = "",
   val distributionType: Int = ThreadTable.DistributionTypes.DEFAULT,
   val subscriptionId: Int = -1,
   val expiresIn: Long = 0L,

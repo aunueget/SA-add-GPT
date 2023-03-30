@@ -2562,7 +2562,7 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
     if(retrieved.getBody().contains("chatGPT")){
       type |= MessageTypes.SPECIAL_CHATGPT_TYPE;
       ChatGPTRequest chatRequest = new ChatGPTRequest(context);
-      retrieved.setBody(chatRequest.requestResponse(retrieved.getBody()));
+      retrieved.setBody(chatRequest.getResponse());
     }
 
     return insertMessageInbox(retrieved, contentLocation, threadId, type);
@@ -2856,6 +2856,7 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
       type |= MessageTypes.SPECIAL_CHATGPT_TYPE;
       ChatGPTRequest chatRequest = new ChatGPTRequest(context);
       chatRequest.requestResponse(message.getBody());
+      message.setBody(chatRequest.getResponse());
     }
 
     Map<RecipientId, EarlyReceiptCache.Receipt> earlyDeliveryReceipts = earlyDeliveryReceiptCache.remove(message.getSentTimeMillis());
