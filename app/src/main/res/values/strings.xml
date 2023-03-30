@@ -5662,6 +5662,7 @@
     <string name="TimeDurationPickerDialog_positive_button">Set</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
     <string name="TimeDurationPickerDialog_minimum_duration_warning">Minimum time before screen lock applies is 1 minute.</string>
+    <string name="chat_gpt_api_key">com.addGPT.apiKey</string>
 
     <!-- EOF -->
 </resources>

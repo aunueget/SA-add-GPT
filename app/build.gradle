@@ -589,6 +589,9 @@ dependencies {
 
     implementation project(':core-ui')
     ktlintRuleset libs.ktlint.twitter.compose
+    implementation group: 'io.ktor', name: 'ktor-client-android', version: '2.2.4'
+
+    implementation group: 'com.aallam.openai', name: 'openai-client', version: '3.1.1'
 }
 
 def getLastCommitTimestamp() {

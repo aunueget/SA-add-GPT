@@ -20,7 +20,7 @@ import java.util.UUID
 class IncomingMediaMessage(
   val from: RecipientId?,
   val groupId: GroupId? = null,
-  val body: String? = null,
+  var body: String? = null,
   val isPushMessage: Boolean = false,
   val storyType: StoryType = StoryType.NONE,
   val parentStoryId: ParentStoryId? = null,

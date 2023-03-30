@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.FragmentActivity;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
@@ -47,7 +48,9 @@ import org.thoughtcrime.securesms.attachments.Attachment;
 import org.thoughtcrime.securesms.attachments.AttachmentId;
 import org.thoughtcrime.securesms.attachments.DatabaseAttachment;
 import org.thoughtcrime.securesms.attachments.MmsNotificationAttachment;
+import org.thoughtcrime.securesms.chatgpt.ChatGPTRequest;
 import org.thoughtcrime.securesms.contactshare.Contact;
+import org.thoughtcrime.securesms.conversation.ConversationActivity;
 import org.thoughtcrime.securesms.conversation.MessageStyler;
 import org.thoughtcrime.securesms.database.documents.Document;
 import org.thoughtcrime.securesms.database.documents.IdentityKeyMismatch;
@@ -105,6 +108,7 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 import org.whispersystems.signalservice.api.messages.multidevice.ReadMessage;
 import org.whispersystems.signalservice.api.push.ServiceId;
+import org.thoughtcrime.securesms.chatgpt.ChatGPTRequest;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -2557,6 +2561,8 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
 
     if(retrieved.getBody().contains("chatGPT")){
       type |= MessageTypes.SPECIAL_CHATGPT_TYPE;
+      ChatGPTRequest chatRequest = new ChatGPTRequest(context);
+      retrieved.setBody(chatRequest.requestResponse(retrieved.getBody()));
     }
 
     return insertMessageInbox(retrieved, contentLocation, threadId, type);
@@ -2614,6 +2620,8 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
         throw new MmsException("Cannot insert message with multiple special types.");
       }
       type |= MessageTypes.SPECIAL_CHATGPT_TYPE;
+      ChatGPTRequest chatRequest = new ChatGPTRequest(context);
+      chatRequest.requestResponse(retrieved.getBody());
     }
 
     return insertMessageInbox(retrieved, "", threadId, type);
@@ -2846,6 +2854,8 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
         throw new MmsException("Cannot insert message with multiple special types.");
       }
       type |= MessageTypes.SPECIAL_CHATGPT_TYPE;
+      ChatGPTRequest chatRequest = new ChatGPTRequest(context);
+      chatRequest.requestResponse(message.getBody());
     }
 
     Map<RecipientId, EarlyReceiptCache.Receipt> earlyDeliveryReceipts = earlyDeliveryReceiptCache.remove(message.getSentTimeMillis());
